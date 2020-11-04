@@ -1,44 +1,43 @@
+  
+#!/bin/bash -x
 
- #!/bin/bash -x
+echo "-------------------------------------------- Welcome To Employee Wage Compution -------------------------------------------------------"
 
-echo "------------------------- Welcome To Employee Wage Compution ------------------------"
+#CONSTANT
+WAGE_PER_HOUR=20
+IS_FULL_TIME=2
+IS_PART_TIME=1
+EMPLOYEE_HOUR_FULLTIME=8
+EMPLOYEE_HOUR_PARTTIME=4
+read -p "To number of working day :" NUMBER_OF_WORKING_DAYS
+read -p "To number of working hours :" NUMBER_OF_WORKING_HOURS
 
-#INITIAL VALUE TO ASSING PRESENT
-isPresent=1
+#VARIABLE
+totalSalary=0
+totalEmployeeHours=0
+totalWorkingDays=0
 
-#TO VARIABLE
-r=$((RANDOM%2))
-caseChoce=$randomNumber
-read -p "To use case four case statement:"caseChoce
-#TO CHECK THE EMPLOYEE PRESENT AND ABSENT
-if [ $r  -eq 	$isPresent ]
-then
-	echo "Employee Present"
-#using use case statement  	
-case "$caseChoce" in
-	0) echo "To calculate Daily Employee Wage"
-		#TO FUNCTION CALCULATE EMPLOYEE WAGE
-		function calculateDailyEmployeeWae(){
-		read -p "Assume Wage per hour is :" isWagePerHour "rupees"
-		read -p "To full day hours is :" isFullDayHour
-		calculateEmployeeWage=$(( $isWagePerHour * $isFullDayHour ))
-		echo "To calculate daily employee wage :" $calculateEmployeeWage "rupees"
-		}
-		calculateDailyEmployeeWae
-		;;
-	1)echo "To calculate part time Employee and wage"
-		function partTimeEmployeeAndWage(){
-		read -p "Assume Wage per hour is :" isWagePerHour "rupees"
-		read -p "To part time hour is :" isFullDayHour
-		calculatePartTimeEmployeeWage=$(( $isWagePerHour * $isFullDayHour ))
-		echo "To calculate part time employee and wage :" $calculatePartTimeEmployeeWage "rupees"
-			}
-		partTimeEmployeeAndWage
-		;;
-		*)echo "No choice"
-		;;
-esac
+#CALCULATE DAILY WAGE TILL CONDITION SATISFIED
+while [[ $totalEmployeeHours -le $NUMBER_OF_WORKING_HOURS &&
+			$totalWorkingDays -le $NUMBER_OF_WORKING_DAYS ]]
+do
+	((totalWorkingDays++))
+	randomShiftCheck=$((RANDOM%3))
+	case $randomShiftCheck in
 
-else
-   echo "Employee Absent"
- fi
+		$IS_FULL_TIME )
+			employeeHour=$((EMPLOYEE_HOUR_FULLTIME))
+			;;
+		$IS_PART_TIME )
+			employeeHour=$((EMPLOYEE_HOUR_PARTTIME))
+			;;
+		* )
+			employeeHour=0
+			;;
+	esac
+	totalEmployeeHours=$(($totalEmployeeHours + $employeeHour))
+	echo "To total employee hours :" $totalEmployeeHours	
+done
+
+#PRINT SALARY FOR A MONTH
+totalWorkingWage=$(($totalEmployeeHours * $WAGE_PER_HOUR))
